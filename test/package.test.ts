@@ -2,6 +2,8 @@ import got from 'got';
 import { Server } from 'http';
 import { createApp } from '../src/app';
 
+// review: we need an "app.test.ts" file to test the app - in this test, we should test calls reach expected functions.
+// For this test, we should unit test exported functions in package.ts
 describe('/package/:name/:version endpoint', () => {
   let server: Server;
   let port: number;
@@ -18,13 +20,19 @@ describe('/package/:name/:version endpoint', () => {
         }
       });
     });
+    // review: we should mock the calls to the registry to avoid external dependencies
+    // so we have control over the response.
   });
 
   afterAll(async () => {
     await new Promise((resolve) => server.close(resolve));
   });
-
-  it('responds', async () => {
+  // review: we need test cases other than the postive/happy path, such as
+  // 1. package not found or invalid package name
+  // 2. version not found or invalid version
+  // 3. edge case such as circular dependencies (maybe npm will not allow this?)
+  
+  it('responds', async ()  => {
     const packageName = 'react';
     const packageVersion = '16.13.0';
 
